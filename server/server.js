@@ -21,10 +21,31 @@ var io = socketIO(server);
 app.use(express.static(publicPath));
 
 //whenever sombody connects
-io.on('connection', (socket) => {
+io.on('connection', function(socket) {
   console.log('New user connected');
 
-  socket.on('disconnect', () => {
+//instead of listening to event here we are creating event
+  /*socket.emit('newEmail', {
+    from: 'mike@example.com',
+    text: 'Hey. What is going on',
+    createat: 123
+  });*/
+
+  socket.emit('newMessage', {
+    from: 'John',
+    text: 'See you then',
+    createdAt: 123123
+  })
+
+  /*socket.on('createEmail', (newEmail) => {
+    console.log('createEmail', newEmail);
+  });*/
+
+  socket.on('createMessage', (message)=> {
+    console.log('createMessage', message);
+  });
+
+  socket.on('disconnect', function () {
     console.log('User was disconnected');
   })
 });
