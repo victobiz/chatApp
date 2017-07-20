@@ -9,10 +9,10 @@ socket.on('connect', function() {
     text: 'Hey. This chris'
   });*/
 
-  socket.emit('createMessage', {
+/*  socket.emit('createMessage', {
     from: 'Chris',
     text: 'great goodness'
-  });
+  });*/
 });
 
 socket.on('disconnect', () => {
