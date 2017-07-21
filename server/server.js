@@ -6,6 +6,7 @@ const socketIO = require ('socket.io');
 
 //reference current directory /server and add public
 const publicPath = path.join(__dirname, '../public');
+const {generateMessage} = require('./utils/message');
 
 //need to add this for heroku enviornment
 const port = process.env.PORT || 3000;
@@ -41,26 +42,35 @@ io.on('connection', function(socket) {
     console.log('createEmail', newEmail);
   });*/
 
-socket.emit('newMessage', {
-  from: 'admin',
-  text: 'Welcome to the chat app',
-  createdAt: new Date().getTime()
-});
+// socket.emit('newMessage', {
+//   from: 'admin',
+//   text: 'Welcome to the chat app',
+//   createdAt: new Date().getTime()
+// });
 
-socket.broadcast.emit('newMessage', {
-  from: 'admin',
-  text: 'new user joined',
-  createdAt: new Date().getTime()
-});
+//now since we have teh message function in the utils folder...
+
+socket.emit('newMessage', generateMessage('admin', 'welcome to the chat app'));
+
+// socket.broadcast.emit('newMessage', {
+//   from: 'admin',
+//   text: 'new user joined',
+//   createdAt: new Date().getTime()
+// });
+
+socket.broadcast.emit('newMessage', generateMessage('admin', 'new user joined'))
 
   socket.on('createMessage', (message)=> {
     console.log('createMessage', message);
 
-    io.emit('newMessage', {
-       from: message.from,
-       text: message.text,
-       createdAt: new Date().getTime()
-     });
+    // io.emit('newMessage', {
+    //    from: message.from,
+    //    text: message.text,
+    //    createdAt: new Date().getTime()
+    //  });
+
+    io.emit('newMessage', generateMessage(message.from, message.text));
+
     // socket.broadcast.emit('newMessage', {
     //   from: message.from,
     //   text: message.text,
